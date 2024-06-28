@@ -1,0 +1,7 @@
+# IDE
+/.idea/
+/.fleet/
+/.run/
+
+# Dependency directories
+node_modules/

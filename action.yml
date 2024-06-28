@@ -1,0 +1,11 @@
+name: 'Notify PHP Releases'
+description: 'A GitHub Action to automatically creates an issue when a new version of PHP is released.'
+author: 'Dominik Szamburski'
+
+branding:
+    icon: 'package'
+    color: 'blue'
+
+runs:
+    using: node20
+    main: dist/index.js
