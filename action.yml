@@ -1,11 +1,34 @@
-name: 'Notify PHP Releases'
-description: 'A GitHub Action to automatically creates an issue when a new version of PHP is released.'
-author: 'Dominik Szamburski'
+name: Notify PHP Releases
+description: A GitHub Action to automatically creates an issue when a new version of PHP is released.
+author: Dominik Szamburski
 
 branding:
-    icon: 'package'
-    color: 'blue'
+  icon: package
+  color: blue
+
+inputs:
+  localfile:
+    required: false
+    default: .releases
+    description: The local file containing current php release.
+  token:
+    required: true
+    description: Token for interacting with the Github API. Default to using the special GITHUB_TOKEN. Because of limitations imposed by GitHub, this must be set if you want the setting of the PR label to trigger an event.
+    default: ${{ github.token }}
+  owner:
+    required: true
+    description: The account owner of the repository. The name is not case sensitive.
+  repo:
+    required: true
+    description: The name of the repository without the .git extension. The name is not case sensitive.
 
 runs:
-    using: node20
-    main: dist/index.js
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+    - uses: nulxrd/latest-php-releases-action@1.0.0
+      id: latest-releases
+    - run: node ./dist/index.js
+      shell: bash
+      env:
+        RELEASES: ${{ steps.latest-releases.outputs.releases }}

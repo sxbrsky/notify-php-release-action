@@ -1,6 +1,6 @@
 # Notify PHP Release Action
 
-A GitHub Action to automatically creates an issue when a new version of PHP is released. 
+A GitHub Action to automatically creates an issue when a new version of PHP is released.
 
 ## License
 
