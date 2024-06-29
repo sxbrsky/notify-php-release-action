@@ -29239,18 +29239,26 @@ const main = async () => {
     const owner = process.env.OWNER || '';
     const repo = process.env.REPO || '';
     const repo_token = process.env.REPO_TOKEN || '';
+    if (!repo_token || !repo || !owner) {
+        (0, core_1.error)('Missing REPO_TOKEN');
+        return;
+    }
     const octokit = (0, github_1.getOctokit)(repo_token);
     const current = getCurrentReleases(localfile);
-    getReleasesFromEnv().forEach((release) => {
+    getReleasesFromEnv().forEach((value) => {
+        const release = value;
         if (!current.includes(release.version)) {
-            octokit.request('POST /repos/{owner}/{repo}/issues', {
+            octokit
+                .request('POST /repos/{owner}/{repo}/issues', {
                 owner,
                 repo,
                 title: `build: bump PHP release to ${release.version}`,
+                body: 'bump PHP version to latest one.',
                 headers: {
-                    'X-GitHub-Api-Version': '2022-11-28'
-                }
-            }).catch(err => {
+                    'X-GitHub-Api-Version': '2022-11-28',
+                },
+            })
+                .catch((err) => {
                 if (err.response) {
                     (0, core_1.error)(err);
                 }
