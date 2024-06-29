@@ -29235,15 +29235,26 @@ const getCurrentReleases = (localfile) => {
     return [];
 };
 const main = async () => {
-    const localfile = (0, core_1.getInput)('localfile') || null;
-    const owner = (0, core_1.getInput)('owner');
-    const repo = (0, core_1.getInput)('repo');
-    const token = (0, core_1.getInput)('token');
-    const octokit = (0, github_1.getOctokit)(token);
+    const localfile = process.env.LOCALFILE || null;
+    const owner = process.env.OWNER || '';
+    const repo = process.env.REPO || '';
+    const repo_token = process.env.REPO_TOKEN || '';
+    const octokit = (0, github_1.getOctokit)(repo_token);
     const current = getCurrentReleases(localfile);
     getReleasesFromEnv().forEach((release) => {
         if (!current.includes(release.version)) {
-            octokit.rest.issues.create({ owner, repo, title: `build: bump PHP release to ${release.version}` });
+            octokit.request('POST /repos/{owner}/{repo}/issues', {
+                owner,
+                repo,
+                title: `build: bump PHP release to ${release.version}`,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            }).catch(err => {
+                if (err.response) {
+                    (0, core_1.error)(err);
+                }
+            });
         }
     });
 };

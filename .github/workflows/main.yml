@@ -1,5 +1,8 @@
 on: [push]
 
+permissions:
+  issues: write
+
 jobs:
   notify_new_releases:
     runs-on: ubuntu-latest
@@ -9,7 +12,7 @@ jobs:
       - name: Check new php releases.
         uses: ./
         with:
-          token: ${{ secrets.TOKEN }}
-          repo: https://github.com/nulxrd/notify-php-release-action
+          repo-token: ${{ github.token }}
+          repo: notify-php-release-action
           owner: nulxrd
           localfile: .releases

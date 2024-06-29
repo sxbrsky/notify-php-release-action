@@ -11,7 +11,7 @@ inputs:
     required: false
     default: .releases
     description: The local file containing current php release.
-  token:
+  repo-token:
     required: true
     description: Token for interacting with the Github API. Default to using the special GITHUB_TOKEN. Because of limitations imposed by GitHub, this must be set if you want the setting of the PR label to trigger an event.
     default: ${{ github.token }}
@@ -32,3 +32,7 @@ runs:
       shell: bash
       env:
         RELEASES: ${{ steps.latest-releases.outputs.releases }}
+        LOCALFILE: ${{ inputs.localfile }}
+        OWNER: ${{ inputs.owner }}
+        REPO: ${{ inputs.repo }}
+        REPO_TOKEN: ${{ inputs.repo-token }}
