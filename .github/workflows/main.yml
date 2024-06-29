@@ -1,0 +1,15 @@
+on: [push]
+
+jobs:
+  notify_new_releases:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Check new php releases.
+        uses: ./
+        with:
+          token: ${{ secrets.TOKEN }}
+          repo: https://github.com/nulxrd/notify-php-release-action
+          owner: nulxrd
+          localfile: .releases
