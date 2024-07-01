@@ -1,7 +1,7 @@
 import * as process from 'node:process'
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
-import { error } from '@actions/core'
+import { error, info } from '@actions/core'
 import { getOctokit } from '@actions/github'
 
 const getReleasesFromEnv = (): object[] => {
@@ -34,27 +34,42 @@ const main = async () => {
   const octokit = getOctokit(repo_token)
   const current = getCurrentReleases(localfile)
 
-  getReleasesFromEnv().forEach((value: object) => {
+  for (const value of getReleasesFromEnv()) {
     const release = value as { version: string; sources: object[] }
 
     if (!current.includes(release.version)) {
-      octokit
-        .request('POST /repos/{owner}/{repo}/issues', {
-          owner,
-          repo,
-          title: `build: bump PHP release to ${release.version}`,
-          body: 'bump PHP version to latest one.',
-          headers: {
-            'X-GitHub-Api-Version': '2022-11-28',
-          },
-        })
-        .catch((err) => {
-          if (err.response) {
-            error(err)
-          }
-        })
+      const title = `build: bump PHP release to ${release.version}`
+
+      const response = await octokit.request(
+        'GET /search/issues?q=' +
+          encodeURIComponent(`${title} in:title repo:${owner}/${repo}`),
+      )
+
+      if (response.data.total_count == 0) {
+        octokit
+          .request('POST /repos/{owner}/{repo}/issues', {
+            owner,
+            repo,
+            title,
+            body: 'bump PHP version to latest one.',
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28',
+            },
+          })
+          .catch((err) => {
+            if (err.response) {
+              error(err)
+            }
+          })
+      } else {
+        /* eslint-disable */
+        info(
+          `Found similar issues: ${response.data.items.map((item: any) => item.html_url, '\n')}`,
+        )
+        /* eslint-enable */
+      }
     }
-  })
+  }
 }
 
 main()

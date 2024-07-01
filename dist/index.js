@@ -29245,26 +29245,36 @@ const main = async () => {
     }
     const octokit = (0, github_1.getOctokit)(repo_token);
     const current = getCurrentReleases(localfile);
-    getReleasesFromEnv().forEach((value) => {
+    for (const value of getReleasesFromEnv()) {
         const release = value;
         if (!current.includes(release.version)) {
-            octokit
-                .request('POST /repos/{owner}/{repo}/issues', {
-                owner,
-                repo,
-                title: `build: bump PHP release to ${release.version}`,
-                body: 'bump PHP version to latest one.',
-                headers: {
-                    'X-GitHub-Api-Version': '2022-11-28',
-                },
-            })
-                .catch((err) => {
-                if (err.response) {
-                    (0, core_1.error)(err);
-                }
-            });
+            const title = `build: bump PHP release to ${release.version}`;
+            const response = await octokit.request('GET /search/issues?q=' +
+                encodeURIComponent(`${title} in:title repo:${owner}/${repo}`));
+            if (response.data.total_count == 0) {
+                octokit
+                    .request('POST /repos/{owner}/{repo}/issues', {
+                    owner,
+                    repo,
+                    title,
+                    body: 'bump PHP version to latest one.',
+                    headers: {
+                        'X-GitHub-Api-Version': '2022-11-28',
+                    },
+                })
+                    .catch((err) => {
+                    if (err.response) {
+                        (0, core_1.error)(err);
+                    }
+                });
+            }
+            else {
+                /* eslint-disable */
+                (0, core_1.info)(`Found similar issues: ${response.data.items.map((item) => item.html_url, '\n')}`);
+                /* eslint-enable */
+            }
         }
-    });
+    }
 };
 main();
 
