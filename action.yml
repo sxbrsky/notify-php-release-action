@@ -28,7 +28,7 @@ runs:
     - uses: actions/checkout@v4
     - uses: nulxrd/latest-php-releases-action@1.0.0
       id: latest-releases
-    - run: node ./dist/index.js
+    - run: node ${{ github.action_path }}/dist/index.js
       shell: bash
       env:
         RELEASES: ${{ steps.latest-releases.outputs.releases }}
