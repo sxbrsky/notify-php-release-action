@@ -5,19 +5,19 @@
   "keywords": [
     "github-action"
   ],
-  "homepage": "https://github.com/nulxrd/notify-php-release-action#readme",
+  "homepage": "https://github.com/sxbrsky/notify-php-release-action#readme",
   "bugs": {
-    "url": "https://github.com/nulxrd/notify-php-release-action/issues"
+    "url": "https://github.com/sxbrsky/notify-php-release-action/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nulxrd/notify-php-release-action.git"
+    "url": "git+https://github.com/sxbrsky/notify-php-release-action.git"
   },
   "license": "MIT",
   "author": {
     "name": "Dominik Szamburski",
     "email": "dominikszamburski99@gmail.com",
-    "url": "https://github.com/nulxrd"
+    "url": "https://github.com/sxbrsky"
   },
   "exports": {
     ".": "./dist/index.js"

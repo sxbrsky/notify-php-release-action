@@ -14,5 +14,5 @@ jobs:
         with:
           repo-token: ${{ github.token }}
           repo: notify-php-release-action
-          owner: nulxrd
+          owner: sxbrsky
           localfile: .releases

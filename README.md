@@ -26,11 +26,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Check for new PHP releases
-        uses: nulxrd/notify-php-release-action@v1
+        uses: sxbrsky/notify-php-release-action@v1
         with:
           repo-token: ${{ github.token }}
           repo: notify-php-release-action
-          owner: nulxrd
+          owner: sxbrsky
           localfile: .releases
 
 ```

@@ -26,7 +26,7 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v4
-    - uses: nulxrd/latest-php-releases-action@1.0.0
+    - uses: sxbrsky/latest-php-releases-action@1.0.0
       id: latest-releases
     - run: node ${{ github.action_path }}/dist/index.js
       shell: bash
